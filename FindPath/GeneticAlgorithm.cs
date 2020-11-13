@@ -6,6 +6,7 @@ namespace FindPath
 {
     class GeneticAlgorithm<T>
     {
+        Func<float[], bool> algorithmContinue;
         Func<T[], float> evalFitness;
         Func<T> randomGene;
         Genome<T>[] population;
@@ -15,14 +16,24 @@ namespace FindPath
         readonly float mutationRate = 0.1f;
 
         float fitnessSum;
+        float[] fitnesses;
 
-        public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Func<T> randomGene, Random rnd)
+        public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Func<T> randomGene, Func<float[], bool> algorithmContinue, Random rnd)
         {
             this.evalFitness = evalFitness;
             this.rnd = rnd;
             this.randomGene = randomGene;
+            this.algorithmContinue = algorithmContinue;
             CreatePopulation(randomSolution);
             SetFitness();
+        }
+
+        public void Run()
+        {
+            while (algorithmContinue(fitnesses))
+            {
+                Crossover();
+            }
         }
 
         private void CreatePopulation(Func<T[]> randomSolution)
@@ -44,6 +55,7 @@ namespace FindPath
             {
                 float fitness = evalFitness(population[i].Genes); 
                 population[i].Fitness = fitness;
+                fitnesses[i] = fitness;
                 fitnessSum += fitness;
             }
 
@@ -120,7 +132,6 @@ namespace FindPath
                 }
             }
         }
-
 
 
     }
