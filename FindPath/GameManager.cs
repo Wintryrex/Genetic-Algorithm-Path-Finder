@@ -21,7 +21,7 @@ namespace FindPath
         List<GameObject> gameObjects;
         Tile[,] tiles;
         Random rnd;
-
+        GeneticAlgorithm<string> geneticAlgorithm;
         public GameManager(Texture2D tileTex, int tileWidth, int tileHeight, SpriteBatch sb)
         {
             this.tileTex = tileTex;
@@ -34,6 +34,7 @@ namespace FindPath
             rnd = new Random();
             InitializeTiles();
             InitializePoints();
+            InitializeGeneticAlgorithm();
         }
 
         public void Update(GameTime gameTime)
@@ -81,6 +82,12 @@ namespace FindPath
             Tile end = (Tile)GetTile(endPos);
             end.SetColor = Color.BlueViolet;
             end.SpecialTile = true;
+        }
+
+        private void InitializeGeneticAlgorithm()
+        {
+            geneticAlgorithm = new GeneticAlgorithm<string>(CreateRandomPath, CalculateFitness, RandomMovement, ContinueGeneticAlgorithm, rnd);
+            geneticAlgorithm.Run(); // Runs the algorithm
         }
 
         private void Iterate(ref int iteratorX, ref int iteratorY, char letter)
