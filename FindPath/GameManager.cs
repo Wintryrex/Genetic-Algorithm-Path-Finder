@@ -8,6 +8,7 @@ namespace FindPath
 {
     class GameManager
     {
+        readonly float pathExtend = 1;
         readonly int tilesX = 20;
         readonly int tilesY = 15;
         readonly int tileWidth;
@@ -18,6 +19,7 @@ namespace FindPath
         Vector2 endPos;
         List<GameObject> gameObjects;
         Tile[,] tiles;
+        Random rnd;
         string movements; 
 
         public GameManager(Texture2D tileTex, int tileWidth, int tileHeight, SpriteBatch sb)
@@ -29,6 +31,7 @@ namespace FindPath
 
             gameObjects = new List<GameObject>();
             movements = "12345"; // 1: Up, 2: Down, 3: Left, 4: Right, 5: Nothing
+            rnd = new Random();
             InitializeTiles();
             InitializePoints();
         }
@@ -105,6 +108,55 @@ namespace FindPath
             return null;
         }
 
+        private string[] CreateRandomPath()
+        {
+            int geneSize = (int)(Distance(startPos, endPos) * pathExtend); //33% more
+            string[] genes = new string[geneSize];
+
+            for (int i = 0; i < genes.Length; ++i)
+            {
+                string currentGenes = string.Join("", genes);
+                Tile currentTile = Decode(currentGenes, false);
+                string availableMovements = GetPossibleMoves(movements, currentTile.Pos);
+
+                int index = rnd.Next(0, availableMovements.Length);
+                genes[i] = availableMovements[index].ToString();
+            }
+
+            return genes;
+        }
+
+        private string GetPossibleMoves(string movements, Vector2 currentPos)
+        {
+            string results = movements;
+            int characterLength = 1;
+
+            if (currentPos.X <= 0)
+            {
+                int pos = results.IndexOf('3');
+                results = results.Remove(pos, characterLength);
+            }
+            else if (currentPos.X >= (tilesX - 1) * tileTex.Width)
+            {
+                int pos = results.IndexOf('4');
+                results = results.Remove(pos, characterLength);
+            }
+
+            if (currentPos.Y <= 0)
+            {
+                int pos = results.IndexOf('1');
+                results = results.Remove(pos, characterLength);
+
+            }
+            else if (currentPos.Y >= (tilesY - 1) * tileTex.Height)
+            {
+                int pos = results.IndexOf('2');
+                results = results.Remove(pos, characterLength);
+            }
+
+            return results;
+        }
+
         private Tile Decode(string movements, bool highlight)
         {
             int iteratorX = (int)startPos.X / tileTex.Width;
@@ -138,6 +190,7 @@ namespace FindPath
             float sum = Math.Abs(x) + Math.Abs(y);
             return sum;
         }
+
 
     }
 }
