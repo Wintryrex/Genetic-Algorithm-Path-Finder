@@ -7,16 +7,20 @@ namespace FindPath
     class GeneticAlgorithm<T>
     {
         Func<T[], float> evalFitness;
+        Func<T> randomGene;
         Genome<T>[] population;
         Random rnd;
-        const int populationSize = 20;
+        readonly int populationSize = 20;
+        readonly int eliteSize = 5;
+        readonly float mutationRate = 0.1f;
 
         float fitnessSum;
 
-        public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Random rnd)
+        public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Func<T> randomGene, Random rnd)
         {
             this.evalFitness = evalFitness;
             this.rnd = rnd;
+            this.randomGene = randomGene;
             CreatePopulation(randomSolution);
             SetFitness();
         }
@@ -61,6 +65,60 @@ namespace FindPath
             }
 
             return null;
+        }
+
+        private void Crossover() //One Point Crossover
+        {
+
+            Genome<T>[] newGen = new Genome<T>[populationSize];
+            int noneElite = populationSize - eliteSize;
+
+            for (int i = 0; i < noneElite; ++i)
+            {
+                Genome<T> parentA = Selection();
+                Genome<T> parentB = Selection();
+
+                int length = parentA.Genes.Length;
+                int point = rnd.Next(0, length);
+                T[] genes = new T[length];
+
+                for (int m = 0; m < length; ++m)
+                {
+                    if (m < point)
+                    {
+                        genes[m] = parentA.Genes[m];
+                    }
+                    else
+                    {
+                        genes[m] = parentB.Genes[m];
+                    }
+                }
+
+                Genome<T> g = new Genome<T>(genes);
+                Mutate(ref g);
+                newGen[i] = g;
+            }
+
+            //elitism
+            for (int i = noneElite - 1; i < populationSize; ++i)
+            {
+                newGen[i] = population[i];
+            }
+
+            population = newGen;
+            SetFitness();
+
+        }
+
+        private void Mutate(ref Genome<T> c)
+        {
+            for (int i = 0; i < c.Genes.Length; ++i)
+            {
+                if (rnd.NextDouble() <= mutationRate)
+                {
+                    c.Genes[i] = randomGene();
+                }
+            }
         }
 
 
