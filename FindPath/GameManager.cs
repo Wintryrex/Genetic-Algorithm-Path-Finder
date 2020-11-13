@@ -92,5 +92,14 @@ namespace FindPath
             return null;
         }
 
+        private float Distance(Vector2 startPos, Vector2 endPos) //Manhattan Distance
+        {
+            float x = (endPos.X - startPos.X) / tileWidth;
+            float y = (endPos.Y - startPos.Y) / tileHeight;
+
+            float sum = Math.Abs(x) + Math.Abs(y);
+            return sum;
+        }
+
     }
 }
