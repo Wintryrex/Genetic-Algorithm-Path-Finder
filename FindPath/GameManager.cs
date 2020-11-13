@@ -164,6 +164,17 @@ namespace FindPath
             return results;
         }
 
+        private bool ContinueGeneticAlgorithm(float[] fitnesses)
+        {
+            for (int i = 0; i < fitnesses.Length; ++i)
+            {
+                if (fitnesses[i] >= 1)
+                    return false;
+            }
+
+            return true;
+        }
+
         private Tile Decode(string movements, bool highlight)
         {
             int iteratorX = (int)startPos.X / tileTex.Width;
@@ -215,6 +226,7 @@ namespace FindPath
 
             return Math.Abs((tilesAmount - dist) / tilesAmount);
         }
+
 
     }
 }
