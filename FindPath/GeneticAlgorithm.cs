@@ -9,9 +9,20 @@ namespace FindPath
         Genome<T>[] population;
         const int populationSize = 20;
 
-        public GeneticAlgorithm()
+        public GeneticAlgorithm(Func<T[]> randomSolution)
         {
-            
+            CreatePopulation(randomSolution);
+        }
+
+        private void CreatePopulation(Func<T[]> randomSolution)
+        {
+            population = new Genome<T>[populationSize];
+
+            for (int i = 0; i < population.Length; ++i)
+            {
+                Genome<T> c = new Genome<T>(randomSolution());
+                population[i] = c;
+            }
         }
 
     }
