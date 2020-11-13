@@ -20,7 +20,7 @@ namespace FindPath
         List<GameObject> gameObjects;
         Tile[,] tiles;
         Random rnd;
-        string movements; 
+        readonly string movements;
 
         public GameManager(Texture2D tileTex, int tileWidth, int tileHeight, SpriteBatch sb)
         {
@@ -198,6 +198,23 @@ namespace FindPath
             return sum;
         }
 
+        private float CalculateFitness(string[] genes)
+        {
+            int iteratorX = (int)startPos.X / tileTex.Width;
+            int iteratorY = (int)startPos.Y / tileTex.Height;
+
+            for (int i = 0; i < genes.Length; ++i)
+            {
+                Iterate(ref iteratorX, ref iteratorY, char.Parse(genes[i]));
+            }
+
+            Vector2 destination = new Vector2(iteratorX * tileTex.Width, iteratorY * tileTex.Height);
+            float dist = Distance(destination, endPos);
+
+            int tilesAmount = (int)(Distance(startPos, endPos) * pathExtend); 
+
+            return Math.Abs((tilesAmount - dist) / tilesAmount);
+        }
 
     }
 }
