@@ -126,6 +126,13 @@ namespace FindPath
             return genes;
         }
 
+        private string RandomMovement()
+        {
+            int index = rnd.Next(0, movements.Length);
+
+            return movements[index].ToString();
+        }
+
         private string GetPossibleMoves(string movements, Vector2 currentPos)
         {
             string results = movements;
