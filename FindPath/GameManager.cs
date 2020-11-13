@@ -8,6 +8,7 @@ namespace FindPath
 {
     class GameManager
     {
+        readonly string movements;
         readonly float pathExtend = 1;
         readonly int tilesX = 20;
         readonly int tilesY = 15;
@@ -20,7 +21,6 @@ namespace FindPath
         List<GameObject> gameObjects;
         Tile[,] tiles;
         Random rnd;
-        readonly string movements;
 
         public GameManager(Texture2D tileTex, int tileWidth, int tileHeight, SpriteBatch sb)
         {
