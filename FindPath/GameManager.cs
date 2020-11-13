@@ -18,6 +18,7 @@ namespace FindPath
         Vector2 endPos;
         List<GameObject> gameObjects;
         Tile[,] tiles;
+        string movements; 
 
         public GameManager(Texture2D tileTex, int tileWidth, int tileHeight, SpriteBatch sb)
         {
@@ -27,6 +28,7 @@ namespace FindPath
             this.sb = sb;
 
             gameObjects = new List<GameObject>();
+            movements = "12345"; // 1: Up, 2: Down, 3: Left, 4: Right, 5: Nothing
             InitializeTiles();
             InitializePoints();
         }
@@ -70,13 +72,24 @@ namespace FindPath
 
         }
 
-
         public void Draw(GameTime gameTime)
         {
             foreach (GameObject g in gameObjects)
             {
                 g.Draw(gameTime);
             }
+        }
+
+        private void Iterate(ref int iteratorX, ref int iteratorY, char letter)
+        {
+            if (letter == '1')
+                --iteratorY;
+            else if (letter == '2')
+                ++iteratorY;
+            else if (letter == '3')
+                --iteratorX;
+            else if (letter == '4')
+                ++iteratorX;
         }
 
         private Tile GetTile(Vector2 pos)
@@ -88,6 +101,31 @@ namespace FindPath
                     return (Tile)g;
                 }
             }
+
+            return null;
+        }
+
+        private Tile Decode(string movements, bool highlight)
+        {
+            int iteratorX = (int)startPos.X / tileTex.Width;
+            int iteratorY = (int)startPos.Y / tileTex.Height;
+            Vector2 start = startPos;
+
+            for (int i = 0; i < movements.Length; ++i)
+            {
+                Iterate(ref iteratorX, ref iteratorY, movements[i]);
+                start.X = iteratorX * tileTex.Width;
+                start.Y = iteratorY * tileTex.Height;
+                Tile tile = GetTile(start);
+                if (tile != null && highlight && !tile.SpecialTile)
+                    tile.SetColor = Color.Red;
+            }
+
+            bool inBounds = (iteratorX > -1 && iteratorX < tilesX) && (iteratorY > -1 && iteratorY < tilesY);
+            int sum = iteratorX * iteratorY;
+
+            if (inBounds && sum <= tiles.Length)
+                return tiles[iteratorY, iteratorX];
 
             return null;
         }
