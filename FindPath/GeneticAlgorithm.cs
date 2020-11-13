@@ -6,12 +6,15 @@ namespace FindPath
 {
     class GeneticAlgorithm<T>
     {
+        Func<T[], float> evalFitness;
         Genome<T>[] population;
         const int populationSize = 20;
 
-        public GeneticAlgorithm(Func<T[]> randomSolution)
+        public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness)
         {
+            this.evalFitness = evalFitness;
             CreatePopulation(randomSolution);
+            SetFitness();
         }
 
         private void CreatePopulation(Func<T[]> randomSolution)
@@ -23,6 +26,16 @@ namespace FindPath
                 Genome<T> c = new Genome<T>(randomSolution());
                 population[i] = c;
             }
+        }
+
+        private void SetFitness()
+        {
+            for (int i = 0; i < population.Length; ++i)
+            {
+                population[i].Fitness = evalFitness(population[i].Genes);
+            }
+
+            Array.Sort(population, (x, y) => x.Fitness.CompareTo(y.Fitness));
         }
 
     }
