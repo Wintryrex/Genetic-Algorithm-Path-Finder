@@ -33,36 +33,6 @@ namespace FindPath
             InitializePoints();
         }
 
-        public void InitializeTiles()
-        {
-            tiles = new Tile[tilesY, tilesX];
-
-            for (int y = 0; y < tilesY; ++y)
-            {
-                for (int x = 0; x < tilesX; ++x)
-                {
-                    Vector2 pos = new Vector2(tileTex.Width * x, tileTex.Height * y);
-                    Tile g = new Tile(pos, tileTex, sb, tileWidth, tileHeight, Color.White, false);
-                    gameObjects.Add(g);
-                    tiles[y, x] = g;
-                }
-            }
-        }
-
-        public void InitializePoints()
-        {
-            startPos = new Vector2(tileTex.Width * 1, tileTex.Height * 1);
-            Tile start = (Tile)GetTile(startPos);
-            start.SetColor = Color.DarkTurquoise;
-            start.SpecialTile = true;
-
-
-            endPos = new Vector2(tileTex.Width * (tilesX - 4), tileTex.Height * (tilesY - 4));
-            Tile end = (Tile)GetTile(endPos);
-            end.SetColor = Color.BlueViolet;
-            end.SpecialTile = true;
-        }
-
         public void Update(GameTime gameTime)
         {
             foreach (GameObject g in gameObjects)
@@ -78,6 +48,36 @@ namespace FindPath
             {
                 g.Draw(gameTime);
             }
+        }
+
+        private void InitializeTiles()
+        {
+            tiles = new Tile[tilesY, tilesX];
+
+            for (int y = 0; y < tilesY; ++y)
+            {
+                for (int x = 0; x < tilesX; ++x)
+                {
+                    Vector2 pos = new Vector2(tileTex.Width * x, tileTex.Height * y);
+                    Tile g = new Tile(pos, tileTex, sb, tileWidth, tileHeight, Color.White, false);
+                    gameObjects.Add(g);
+                    tiles[y, x] = g;
+                }
+            }
+        }
+
+        private void InitializePoints()
+        {
+            startPos = new Vector2(tileTex.Width * 1, tileTex.Height * 1);
+            Tile start = (Tile)GetTile(startPos);
+            start.SetColor = Color.DarkTurquoise;
+            start.SpecialTile = true;
+
+
+            endPos = new Vector2(tileTex.Width * (tilesX - 4), tileTex.Height * (tilesY - 4));
+            Tile end = (Tile)GetTile(endPos);
+            end.SetColor = Color.BlueViolet;
+            end.SpecialTile = true;
         }
 
         private void Iterate(ref int iteratorX, ref int iteratorY, char letter)
