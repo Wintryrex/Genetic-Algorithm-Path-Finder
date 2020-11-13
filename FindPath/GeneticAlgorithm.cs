@@ -41,6 +41,7 @@ namespace FindPath
         private void CreatePopulation(Func<T[]> randomSolution)
         {
             population = new Genome<T>[populationSize];
+            fitnesses = new float[populationSize];
 
             for (int i = 0; i < population.Length; ++i)
             {
