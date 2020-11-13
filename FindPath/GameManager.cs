@@ -8,6 +8,9 @@ namespace FindPath
 {
     class GameManager
     {
+        bool stopTimer = true;
+        int genIterator;
+        float timer = 2f;
         readonly string movements;
         readonly float pathExtend = 1;
         readonly int tilesX = 20;
@@ -22,6 +25,7 @@ namespace FindPath
         Tile[,] tiles;
         Random rnd;
         GeneticAlgorithm<string> geneticAlgorithm;
+        List<Generation<string>> records;
         public GameManager(Texture2D tileTex, int tileWidth, int tileHeight, SpriteBatch sb)
         {
             this.tileTex = tileTex;
@@ -35,6 +39,7 @@ namespace FindPath
             InitializeTiles();
             InitializePoints();
             InitializeGeneticAlgorithm();
+            stopTimer = false;
         }
 
         public void Update(GameTime gameTime)
@@ -44,6 +49,7 @@ namespace FindPath
                 g.Update(gameTime);
             }
 
+            CreateResult(gameTime);
         }
 
         public void Draw(GameTime gameTime)
@@ -88,6 +94,7 @@ namespace FindPath
         {
             geneticAlgorithm = new GeneticAlgorithm<string>(CreateRandomPath, CalculateFitness, RandomMovement, ContinueGeneticAlgorithm, rnd);
             geneticAlgorithm.Run(); // Runs the algorithm
+            records = geneticAlgorithm.Records; // Get list of generations
         }
 
         private void Iterate(ref int iteratorX, ref int iteratorY, char letter)
@@ -100,6 +107,39 @@ namespace FindPath
                 --iteratorX;
             else if (letter == '4')
                 ++iteratorX;
+        }
+
+        private void CreateResult(GameTime gameTime)
+        {
+            if (!stopTimer)
+            {
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                timer -= elapsed;
+
+
+                if (timer < 0)
+                {
+                    ResetGridColor();
+                    string movements = string.Join("", records[genIterator].GetFittest().Genes);
+                    Decode(movements, true);
+                    ++genIterator;
+                    if (genIterator >= records.Count)
+                    {
+                        stopTimer = true;
+                    }
+
+                    timer = 0.1f;
+                }
+            }
+        }
+
+        private void ResetGridColor()
+        {
+            foreach (Tile g in gameObjects)
+            {
+                if (!g.SpecialTile)
+                    g.SetColor = Color.White;
+            }
         }
 
         private Tile GetTile(Vector2 pos)
