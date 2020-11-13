@@ -10,6 +10,7 @@ namespace FindPath
         Func<T[], float> evalFitness;
         Func<T> randomGene;
         Genome<T>[] population;
+        List<Generation<T>> records;
         Random rnd;
         readonly int populationSize = 20;
         readonly int eliteSize = 5;
@@ -24,6 +25,7 @@ namespace FindPath
             this.rnd = rnd;
             this.randomGene = randomGene;
             this.algorithmContinue = algorithmContinue;
+            records = new List<Generation<T>>(); // Store all generations
             CreatePopulation(randomSolution);
             SetFitness();
         }
@@ -60,6 +62,8 @@ namespace FindPath
             }
 
             Array.Sort(population, (x, y) => x.Fitness.CompareTo(y.Fitness));
+            Generation<T> data = new Generation<T>(population);
+            records.Add(data);
         }
 
         private Genome<T> Selection() 
