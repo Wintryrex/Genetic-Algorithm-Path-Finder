@@ -3,4 +3,4 @@ Implemented a generic genetic algorithm to find a path from one tile to another 
 
 ## Demo
 
-![alt text](https://github.com/Wintryrex/Genetic-Algorithm-Path-Finder/demo.gif "Demo of the algorithm")
+![alt text](https://github.com/Wintryrex/Genetic-Algorithm-Path-Finder/blob/main/demo.gif "Demo of the algorithm")
