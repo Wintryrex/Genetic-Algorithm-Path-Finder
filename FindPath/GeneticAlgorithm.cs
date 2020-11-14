@@ -26,6 +26,15 @@ namespace FindPath
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneticAlgorithm{T}"/> class.
+        /// </summary>
+        /// <param name="randomSolution">A random solution generator</param>
+        /// <param name="evalFitness">The function that evaluates fitness values. The fitness value has to be normalized. </param>
+        /// <param name="randomGene">A function that generates a random bit of a solution </param>
+        /// <param name="algorithmContinue">A condition for when to terminate the algorithm </param>
+        /// <param name="rnd">An instance of the Random class</param>
+        /// <param name="mutationRate">The mutation rate</param>
         public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Func<T> randomGene, Func<float[], bool> algorithmContinue, Random rnd, float mutationRate)
         {
             this.evalFitness = evalFitness;
