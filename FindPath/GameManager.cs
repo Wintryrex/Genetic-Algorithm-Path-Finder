@@ -8,24 +8,24 @@ namespace FindPath
 {
     class GameManager
     {
-        bool stopTimer = true;
-        int genIterator;
-        float timer = 2f;
-        readonly string movements;
-        readonly float pathExtend = 1;
-        readonly int tilesX = 20;
-        readonly int tilesY = 15;
-        readonly int tileWidth;
-        readonly int tileHeight;
-        readonly Texture2D tileTex;
+        bool stopTimer = true; // For stop displaying results once iteration is finished
+        int genIterator; //Generation iterator
+        float timer = 2f; // Timer that starts when the game opens
+        readonly string movements; // Text that contains numbers. Each number represent a direction
+        readonly float pathExtend = 1; //Adjusts how big path the random generator should generate
+        readonly int tilesX = 20; // Amount of tiles in the x-axis
+        readonly int tilesY = 15; // Amount of tiles in the y-axis
+        readonly int tileWidth; //Tile width
+        readonly int tileHeight; // Tile height
+        readonly Texture2D tileTex; //Texture of the tile
         readonly SpriteBatch sb;
-        Vector2 startPos;
-        Vector2 endPos;
-        List<GameObject> gameObjects;
-        Tile[,] tiles;
-        Random rnd;
-        GeneticAlgorithm<string> geneticAlgorithm;
-        List<Generation<string>> records;
+        Vector2 startPos; //Start position 
+        Vector2 endPos; // End position
+        List<GameObject> gameObjects; //List of all gameobjects
+        Tile[,] tiles; // The grid
+        Random rnd; // For random values
+        GeneticAlgorithm<string> geneticAlgorithm; // Genetic Algorithm
+        List<Generation<string>> records; // List of generations
         public GameManager(Texture2D tileTex, int tileWidth, int tileHeight, SpriteBatch sb)
         {
             this.tileTex = tileTex;

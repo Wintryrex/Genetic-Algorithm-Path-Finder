@@ -42,7 +42,7 @@ namespace FindPath
             this.randomGene = randomGene;
             this.algorithmContinue = algorithmContinue;
             this.mutationRate = mutationRate;
-            records = new List<Generation<T>>(); // Store all generations
+            records = new List<Generation<T>>(); // Stores all generations
             CreatePopulation(randomSolution);
             SetFitness();
         }
