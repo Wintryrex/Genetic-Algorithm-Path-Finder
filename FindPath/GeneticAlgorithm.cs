@@ -6,15 +6,15 @@ namespace FindPath
 {
     class GeneticAlgorithm<T>
     {
+        List<Generation<T>> records;
         Func<float[], bool> algorithmContinue;
         Func<T[], float> evalFitness;
         Func<T> randomGene;
         Genome<T>[] population;
-        List<Generation<T>> records;
         Random rnd;
         readonly int populationSize = 20;
         readonly int eliteSize = 5;
-        readonly float mutationRate = 0.1f;
+        readonly float mutationRate;
         float fitnessSum;
         float[] fitnesses;
 
@@ -26,12 +26,13 @@ namespace FindPath
             }
         }
 
-        public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Func<T> randomGene, Func<float[], bool> algorithmContinue, Random rnd)
+        public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Func<T> randomGene, Func<float[], bool> algorithmContinue, Random rnd, float mutationRate)
         {
             this.evalFitness = evalFitness;
             this.rnd = rnd;
             this.randomGene = randomGene;
             this.algorithmContinue = algorithmContinue;
+            this.mutationRate = mutationRate;
             records = new List<Generation<T>>(); // Store all generations
             CreatePopulation(randomSolution);
             SetFitness();
