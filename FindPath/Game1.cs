@@ -6,28 +6,31 @@ namespace FindPath
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        GameManager manager;
 
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 750;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            graphics.ApplyChanges();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            Texture2D tileTex = Content.Load<Texture2D>("tile");
 
-            // TODO: use this.Content to load your game content here
+            manager = new GameManager(tileTex, tileTex.Width, tileTex.Height, spriteBatch);
         }
 
         protected override void Update(GameTime gameTime)
@@ -35,8 +38,7 @@ namespace FindPath
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
+            manager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -44,7 +46,11 @@ namespace FindPath
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            manager.Draw(gameTime);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
