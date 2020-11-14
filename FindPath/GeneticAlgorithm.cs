@@ -15,9 +15,16 @@ namespace FindPath
         readonly int populationSize = 20;
         readonly int eliteSize = 5;
         readonly float mutationRate = 0.1f;
-
         float fitnessSum;
         float[] fitnesses;
+
+        public List<Generation<T>> Records
+        {
+            get
+            {
+                return records;
+            }
+        }
 
         public GeneticAlgorithm(Func<T[]> randomSolution, Func<T[], float> evalFitness, Func<T> randomGene, Func<float[], bool> algorithmContinue, Random rnd)
         {
