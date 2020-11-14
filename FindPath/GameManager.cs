@@ -92,7 +92,7 @@ namespace FindPath
 
         private void InitializeGeneticAlgorithm()
         {
-            geneticAlgorithm = new GeneticAlgorithm<string>(CreateRandomPath, CalculateFitness, RandomMovement, ContinueGeneticAlgorithm, rnd);
+            geneticAlgorithm = new GeneticAlgorithm<string>(CreateRandomPath, CalculateFitness, RandomMovement, ContinueGeneticAlgorithm, rnd, 0.1f);
             geneticAlgorithm.Run(); // Runs the algorithm
             records = geneticAlgorithm.Records; // Get list of generations
         }
